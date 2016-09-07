@@ -1,0 +1,60 @@
+import unittest
+import os
+from selenium.common.exceptions import TimeoutException
+from selenium.webdriver.support.ui import WebDriverWait # available since 2.4.0
+from selenium.webdriver.support import expected_conditions as EC # available since 2.26.0
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+import getpass
+
+#Username
+print("Enter email address:")
+email_address=input()
+
+#password
+print("Enter password")
+password=getpass.getpass()
+
+#import chrome driver
+chromedriver = "/Users/Jordan/Downloads/chromedriver"
+os.environ["webdriver.chrome.driver"] = chromedriver
+
+def __init__(self, driver):
+    self.driver = driver
+	
+#Define Class
+class EmailTest(unittest.TestCase):
+	
+	#Setup test 
+	def setUp(self):
+		self.driver = webdriver.Chrome(chromedriver)
+		self.driver.get("https://www.hotmail.com")
+	
+	#Define test
+	def test_login(self):
+
+		# find the element that's name attribute is for login
+		inputElement = self.driver.find_element_by_name("loginfmt")
+
+		# type in the username
+		
+		inputElement.send_keys(email_address)
+	
+		# submit the form 
+		inputElement.submit()
+	
+		# find the element that's name attribute is for password
+		inputElement = self.driver.find_element_by_name("passwd")
+	
+		# type in the password
+		inputElement.send_keys(password)
+	
+		# submit the form 
+		inputElement.submit() 
+	
+		#Test for correct login
+		assert "outlook" in self.driver.current_url, "login failed"
+		
+#Run Test
+suite = unittest.TestLoader().loadTestsFromTestCase(EmailTest)
+unittest.TextTestRunner(verbosity=2).run(suite)
